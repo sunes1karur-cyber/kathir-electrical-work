@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.KathirElectricalWork" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#F97316</item>
+        <item name="android:statusBarColor">#082A4C</item>
+        <item name="android:navigationBarColor">#082A4C</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
