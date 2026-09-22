@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071d42"><title>SUN Electrical Service</title>
+  <link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="work.css"><link rel="stylesheet" href="purchase.css"><link rel="stylesheet" href="invoice-modern.css"><link rel="stylesheet" href="invoice-overrides.css"><link rel="stylesheet" href="delete-data.css"><link rel="stylesheet" href="update.css">
+</head>
+<body>
+  <section id="login" class="login-page">
+    <div class="login-card">
+      <img src="assets/logo.png" alt="SUN Electrical Service">
+      <h1>SUN ELECTRICAL SERVICE</h1><p>Work Management App</p>
+      <form id="loginForm"><input id="username" placeholder="Username" autocomplete="username" required>
+      <input id="password" type="password" placeholder="Password" autocomplete="current-password" required>
+      <button>LOGIN</button><div id="loginError" class="error"></div></form>
+    </div>
+  </section>
+  <div id="app" hidden>
+    <header><button id="menuBtn" class="icon">☰</button><img src="assets/logo.png"><div><b>SUN ELECTRICAL SERVICE</b><small id="roleLabel"></small></div><span id="syncState">● Offline ready</span></header>
+    <div id="updateBanner" class="update-banner" hidden>
+      <div><b>Software update available</b><span id="updateText"></span></div>
+      <button type="button" id="installUpdate">UPDATE NOW</button>
+    </div>
+    <aside id="nav"></aside>
+    <main>
+      <section id="dashboard" class="page"><h2>Dashboard</h2><div id="stats" class="stats"></div><div class="panel"><h3>Recent Jobs</h3><div id="recent"></div></div></section>
+      <section id="daily" class="page" hidden><h2>Daily Entry</h2><form id="jobForm" class="form-grid">
+        <label>Date<input name="date" type="date" required></label><label>Job Number (Automatic)<input name="jobNo" required readonly></label>
+        <label>Party Name<input name="party" list="partyList" autocomplete="off" required></label><label>Phone Number<input name="phone" inputmode="numeric"></label><label>Address<input name="address"></label>
+        <label>DC Number (Optional)<input name="dcNo"></label><label>Item<input name="item" list="itemList" autocomplete="off"></label><label>Make<input name="make" list="makeList" autocomplete="off"></label>
+        <label>Frame<input name="frame" list="frameList" autocomplete="off"></label><label>HP / KVA<input name="hp" list="hpList" autocomplete="off"></label><label>RPM<input name="rpm" list="rpmList" autocomplete="off"></label>
+        <label>AMPS<input name="amps" list="ampsList" autocomplete="off"></label><label>PH<input name="ph" list="phList" autocomplete="off"></label><label>Inform To<input name="informTo" list="informToList" autocomplete="off" placeholder="Informed person name"></label>
+        <div class="wide actions"><button id="dailySubmit" type="submit">SAVE ENTRY</button><button id="cancelDailyEdit" type="button" class="secondary" hidden>CANCEL EDIT</button><button type="reset" class="secondary">CLEAR</button></div>
+      </form><h3>Saved Daily Entries</h3><div id="dailyEntryTable"></div></section>
+      <section id="workentry" class="page" hidden><h2>Work Entry</h2><div class="panel"><form id="workForm"><label><b>Job Number</b><select id="workJobNo" required></select></label><div class="work-box"><div class="work-head"><b>Work Details List</b><button type="button" id="addWork">+ ADD WORK</button></div><div id="workRows"></div></div><div class="work-box"><div class="work-head"><b>Materials Used (Stock Deduction)</b><button type="button" id="addMaterial">+ ADD MATERIAL</button></div><div id="materialRows"></div></div><div class="actions work-save"><button type="submit">SAVE WORK ENTRY</button><button type="button" id="clearWork" class="secondary">CLEAR</button></div></form></div><div id="workJobTable"></div></section>
+      <section id="pending" class="page" hidden><h2>Work Pending</h2><div id="pendingTable"></div></section>
+      <section id="delivery" class="page" hidden><h2>Delivery Update</h2><form id="deliveryForm" class="form-grid compact"><label>Job Number<select name="jobNo"></select></label><label>Delivery Date<input name="deliveryDate" type="date" required></label><button>UPDATE DELIVERY</button></form><h3>Delivery Pending List</h3><div id="deliveryPendingTable"></div><h3>Delivered Jobs</h3><div id="deliveryTable"></div></section>
+      <section id="quotation" class="page owner-only" hidden><h2>Work Quotation</h2><form id="quotationForm" class="form-grid"><label>Job Number<select name="jobNo" id="quotationJobNo" required></select></label><label>Quotation Number (Automatic)<input name="quoteNo" required readonly></label><label>Quotation Date<input name="quoteDate" type="date" required></label><div class="wide work-box"><div class="work-head"><b>Quotation Items</b><button type="button" id="addQuoteLine">+ ADD LINE</button></div><div id="quoteLines"></div></div><div class="wide actions"><button>SAVE QUOTATION</button></div></form><div id="quotationPreview"></div><h3>Saved Quotations</h3><div id="quotationTable"></div></section>
+      <section id="unbilling" class="page owner-only" hidden><h2>UN Billing</h2><p>Delivery completed, invoice not created.</p><div id="unbillingTable"></div></section>
+      <section id="createinvoice" class="page owner-only" hidden><h2>Invoice</h2><p>Delivery update செய்யாத Job-களுக்கும் Invoice உருவாக்கலாம்.</p><div id="quotationForInvoice"></div><form id="invoiceBusinessForm" class="form-grid business-editor"><h3 class="wide">Edit Invoice Phone & Bank Details</h3><label>Phone Number 1<input name="phone1"></label><label>Phone Number 2<input name="phone2"></label><label>Phone Number 3<input name="phone3"></label><label>Bank Name<input name="bankName"></label><label>Account Name<input name="accountName"></label><label>Account Number<input name="accountNumber"></label><label>Branch<input name="branch"></label><label>IFSC Code<input name="ifsc"></label><div class="wide actions"><button>SAVE PHONE & BANK DETAILS</button></div></form><form id="invoiceForm" class="form-grid"><label>DC Number / Job Number<select name="jobNo" id="invoiceJobNo" required></select></label><label>Invoice Number (Automatic / Editable)<input name="invoice" required></label><label>Billing Date<input name="billingDate" type="date" required></label><div class="wide work-box"><div class="work-head"><b>Invoice Description & Price</b><button type="button" id="addInvoiceLine">+ ADD LINE</button></div><div id="invoiceLines"></div></div><div class="wide actions"><button id="invoiceSubmit">CREATE INVOICE</button><button type="button" id="cancelInvoiceEdit" class="secondary" hidden>CANCEL EDIT</button></div></form><div id="invoicePreview"></div><h3>Saved Invoice Edit</h3><div class="form-grid compact"><label>Saved Invoice<select id="savedInvoiceSelect"></select></label><button type="button" id="editInvoiceBtn">EDIT SELECTED INVOICE</button></div><h3>Created Invoices</h3><div id="createdInvoiceTable"></div></section>
+      <section id="parties" class="page" hidden><h2>Party Details</h2><form id="partyForm" class="form-grid"><label>Name<input name="name" required></label><label>Phone<input name="phone"></label><label class="wide">Address<input name="address"></label><button>ADD / UPDATE PARTY</button></form><div id="partyTable"></div></section>
+      <section id="invoice" class="page owner-only" hidden><h2>Payment Received</h2><form id="paymentForm" class="form-grid"><label>Payment Pending Job<select name="jobNo" id="paymentJobNo" required></select></label><label>Received Amount<input name="received" type="number" min="0.01" step="0.01" required></label><label>Shop Price<input name="shopPrice" type="number" min="0" step="0.01"></label><div class="wide actions"><button>SAVE PAYMENT</button></div></form><h3>Payment Pending List</h3><div id="invoiceTable"></div></section>
+      <section id="history" class="page owner-only" hidden><h2>Invoice History</h2><div class="panel invoice-lookup"><label><b>Invoice Number</b><input id="invoiceLookup" inputmode="numeric" autocomplete="off" placeholder="Type invoice number"></label><div id="invoiceLookupResult">Type an invoice number to view party details.</div></div><div id="historyTable"></div></section>
+      <section id="stock" class="page" hidden>
+        <h2>Material Purchase & Stock</h2>
+        <form id="purchaseForm" class="panel">
+          <h3>Purchase Entry</h3>
+          <label>Purchase Date<input name="purchaseDate" type="date" required></label>
+          <label>Shop Name<input name="shop" list="shopList" autocomplete="off" required placeholder="Kadai name"></label>
+          <div class="work-box">
+            <div class="work-head"><b>Materials Purchased</b><button type="button" id="addPurchaseMaterial">+ ADD MATERIAL</button></div>
+            <div id="purchaseMaterialRows"></div>
+          </div>
+          <button>SAVE PURCHASE</button>
+        </form>
+        <h3>Material Stock — Purchased − Work Used = Remaining</h3><div id="stockTable"></div>
+      </section>
+      <section id="accounts" class="page owner-only" hidden>
+        <h2>Monthly Accounts</h2>
+        <div class="form-grid compact"><label>Select Month<input id="accountMonth" type="month"></label><label>Yearly Report<input id="accountYear" type="number" min="2000" max="2100"></label></div>
+        <div id="accountStats" class="stats"></div>
+        <div class="form-grid">
+          <form id="salaryForm" class="panel">
+            <h3>Labour Salary Entry</h3>
+            <label>Salary Date<input name="salaryDate" type="date" required></label>
+            <label>Labour Name<input name="labour" list="labourList" autocomplete="off" required></label>
+            <label>Salary Amount<input name="amount" type="number" min="0.01" step="0.01" required></label>
+            <button>SAVE SALARY</button>
+          </form>
+          <form id="shopPaymentForm" class="panel">
+            <h3>Shop Account Entry</h3>
+            <label>Entry Date<input name="shopPaymentDate" type="date" required></label>
+            <label>Shop Name<input name="shop" list="shopList" autocomplete="off" required></label>
+            <label>Purchase Amount<input name="purchaseAmount" type="number" min="0" step="0.01" value="0"></label>
+            <label>Paid Amount<input name="paidAmount" type="number" min="0" step="0.01" value="0"></label>
+            <button>SAVE SHOP ACCOUNT</button>
+          </form>
+        </div>
+        <h3>Shop-wise Purchase Total</h3><div id="shopTotals"></div>
+        <h3>Purchase Entries</h3><div id="purchaseTable"></div>
+        <h3>Labour Name-wise Salary Total</h3><div id="salaryTable"></div>
+        <h3>Shop Purchase & Payment Entries</h3><div id="shopPaymentTable"></div>
+        <h3>Yearly Month-wise Accounts</h3><div id="yearlyTable"></div>
+      </section>
+      <section id="datamanager" class="page owner-only" hidden>
+        <h2>Delete Data — Owner Only</h2>
+        <p class="delete-note">Delete செய்வதற்கு முன் confirmation கேட்கப்படும். Delete செய்த data cloud sync ஆன பிறகு மற்ற devices-லிருந்தும் நீங்கும்.</p>
+        <h3>Daily Job Entries</h3><div id="deleteJobsTable"></div>
+        <h3>Party Details</h3><div id="deletePartiesTable"></div>
+        <h3>Material Purchase Entries</h3><div id="deletePurchasesTable"></div>
+        <h3>Labour Salary Entries</h3><div id="deleteSalariesTable"></div>
+        <h3>Shop Purchase & Payment Entries</h3><div id="deleteShopPaymentsTable"></div>
+        <h3>Saved Daily Entry Suggestions</h3><div id="deleteSuggestionsTable"></div>
+      </section>
+      <section id="settings" class="page owner-only" hidden><h2>Settings</h2><form id="businessForm" class="form-grid"><h3 class="wide">Invoice Phone & Bank Details</h3><label>Phone Number 1<input name="phone1"></label><label>Phone Number 2<input name="phone2"></label><label>Phone Number 3<input name="phone3"></label><label>Bank Name<input name="bankName"></label><label>Account Name<input name="accountName"></label><label>Account Number<input name="accountNumber"></label><label>Branch<input name="branch"></label><label>IFSC Code<input name="ifsc"></label><div class="wide actions"><button>SAVE DETAILS</button></div></form><div class="panel"><h3>Offline & Sync</h3><p>Entries are stored on this device immediately. Pending changes: <b id="queueCount">0</b></p><button id="exportBtn">EXPORT BACKUP</button><label class="file">IMPORT BACKUP<input id="importFile" type="file" accept="application/json"></label></div></section>
+    </main>
+    <div id="toast"></div>
+  </div>
+  <datalist id="partyList"></datalist><datalist id="itemList"></datalist><datalist id="makeList"></datalist><datalist id="frameList"></datalist><datalist id="hpList"></datalist><datalist id="rpmList"></datalist><datalist id="ampsList"></datalist><datalist id="phList"></datalist><datalist id="informToList"></datalist><datalist id="workTypeList"></datalist><datalist id="workDetailsList"></datalist><datalist id="shopList"></datalist><datalist id="labourList"></datalist><datalist id="materialList"></datalist>
+  <script src="android-bridge.js"></script><script src="cloud-sync.js"></script><script src="app.js"></script>
+</body></html>

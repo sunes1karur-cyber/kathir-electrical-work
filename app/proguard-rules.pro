@@ -1,1 +1,3 @@
-# Kathir Electrical Work release rules
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}

@@ -1,0 +1,8 @@
+.purchase-material-row{display:grid;grid-template-columns:1.5fr 100px 120px 42px;gap:8px;margin:8px 0}
+.purchase-material-row button{background:#d64242;color:#fff;padding:7px}
+#purchaseForm{grid-column:span 2}
+#purchaseForm>label{display:block;margin:10px 0}
+#purchaseForm>button{margin-top:12px}
+@media(max-width:800px){.purchase-material-row{grid-template-columns:1fr 1fr}#purchaseForm{grid-column:auto}}
+.shop-browser{display:grid;grid-template-columns:minmax(180px,260px) 1fr;gap:16px;align-items:start}.shop-name-list{display:flex;flex-direction:column;gap:7px}.shop-name-list button{text-align:left;background:#dfeafb;color:#0b2854}.shop-name-list button.active{background:#ff9500}.shop-detail{min-height:120px;background:#fff;border-radius:12px;padding:14px;overflow:auto}
+@media(max-width:800px){.shop-browser{grid-template-columns:1fr}.shop-name-list{display:grid;grid-template-columns:1fr 1fr}}
